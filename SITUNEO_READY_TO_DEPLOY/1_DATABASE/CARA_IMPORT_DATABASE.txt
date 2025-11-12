@@ -1,0 +1,156 @@
+========================================================
+CARA IMPORT DATABASE KE CPANEL
+========================================================
+
+FILE YANG HARUS DIIMPORT:
+→ situneo_database_FIXED.sql (130 tabel, sudah diperbaiki)
+
+
+========================================================
+STEP BY STEP IMPORT VIA PHPMYADMIN
+========================================================
+
+1. Login ke cPanel
+   URL: https://situneo.my.id/cpanel atau sesuai hosting Anda
+
+2. Cari dan klik "phpMyAdmin"
+
+3. Di sidebar kiri, pilih database:
+   → nrrskfvk_situneo_digital
+
+   Jika database belum ada:
+   a. Klik tab "Databases"
+   b. Buat database baru: nrrskfvk_situneo_digital
+   c. Collation: utf8mb4_unicode_ci
+
+4. Setelah database dipilih, klik tab "Import"
+
+5. Klik tombol "Choose File" atau "Browse"
+
+6. Pilih file: situneo_database_FIXED.sql
+
+7. Setting import (biasanya sudah benar):
+   ✓ Format: SQL
+   ✓ Format-specific options: (biarkan default)
+   ✓ Character set of the file: utf8mb4
+
+8. Scroll ke bawah, klik tombol "Go" atau "Import"
+
+9. TUNGGU proses import selesai (bisa 1-2 menit)
+
+10. Jika BERHASIL:
+    - Muncul pesan: "Import has been successfully finished"
+    - Total queries executed: 130+
+
+11. VERIFIKASI:
+    - Klik tab "Structure"
+    - Harus ada 130 tabel
+    - Scroll dan cek tabel-tabel penting ada:
+      ✓ users
+      ✓ clients
+      ✓ partners
+      ✓ orders
+      ✓ services
+      ✓ dan 125 tabel lainnya
+
+
+========================================================
+ALTERNATIF: IMPORT VIA COMMAND LINE (Advanced)
+========================================================
+
+Jika Anda punya akses SSH:
+
+1. Upload file SQL ke server via FTP/SCP
+
+2. Login SSH:
+   ssh username@situneo.my.id
+
+3. Navigate ke folder tempat file SQL:
+   cd /path/to/upload
+
+4. Import database:
+   mysql -u nrrskfvk_user_situneo_digital -p nrrskfvk_situneo_digital < situneo_database_FIXED.sql
+
+5. Enter password: Devin1922$
+
+6. Tunggu selesai
+
+7. Verifikasi:
+   mysql -u nrrskfvk_user_situneo_digital -p -e "USE nrrskfvk_situneo_digital; SHOW TABLES;" | wc -l
+
+   Output harus: 131 (130 tabel + 1 header)
+
+
+========================================================
+VERIFIKASI SETELAH IMPORT
+========================================================
+
+Jalankan query dari file: VERIFIKASI_QUICK.sql
+
+1. Di phpMyAdmin, klik tab "SQL"
+
+2. Copy isi file VERIFIKASI_QUICK.sql
+
+3. Paste ke SQL query box
+
+4. Klik "Go"
+
+5. Cek hasil:
+   ✓ Total tables: 130
+   ✓ Semua tabel kunci: ✓ EXISTS
+   ✓ Sample data ada (partner_tiers, payment_methods, dll)
+
+
+========================================================
+TROUBLESHOOTING
+========================================================
+
+❌ ERROR: "No database selected"
+   → Pastikan Anda sudah pilih database di sidebar kiri
+
+❌ ERROR: "Table already exists"
+   → Database tidak kosong, ada tabel lama
+   → Solusi: Drop semua tabel lama dulu, atau buat database baru
+
+❌ ERROR: "MySQL server has gone away" / Timeout
+   → File terlalu besar, koneksi timeout
+   → Solusi 1: Gunakan command line import
+   → Solusi 2: Tambah timeout di php.ini:
+     max_execution_time = 300
+
+❌ ERROR: "Foreign key constraint fails"
+   → File SQL yang diimport bukan versi FIXED
+   → Pastikan file yang diimport: situneo_database_FIXED.sql
+
+❌ Hanya 8 tabel terbuat, tidak semua
+   → Berarti file yang diimport masih yang lama
+   → Drop semua tabel, import ulang dengan file FIXED
+
+
+========================================================
+PENTING!
+========================================================
+
+✓ File yang HARUS digunakan: situneo_database_FIXED.sql
+✗ JANGAN gunakan: schema (2).sql (file lama, ada bug)
+
+✓ Setelah import berhasil, HARUS ada 130 tabel
+✗ Jika hanya 8 tabel, import GAGAL, ulangi!
+
+✓ Verifikasi dengan VERIFIKASI_QUICK.sql
+✓ Pastikan sample data ada (partner_tiers, dll)
+
+
+========================================================
+DATABASE INFO
+========================================================
+
+Database: nrrskfvk_situneo_digital
+User:     nrrskfvk_user_situneo_digital
+Password: Devin1922$
+Host:     localhost
+Tables:   130
+Size:     ~124 KB (schema only)
+
+
+Selamat mengimport! 🚀

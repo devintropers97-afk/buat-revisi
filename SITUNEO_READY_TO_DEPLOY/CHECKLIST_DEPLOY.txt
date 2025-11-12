@@ -1,0 +1,123 @@
+========================================================
+CHECKLIST DEPLOYMENT SITUNEO DIGITAL PLATFORM
+========================================================
+
+Centang setiap step setelah selesai dikerjakan:
+
+
+[ ] STEP 1: IMPORT DATABASE
+    [ ] Login ke cPanel
+    [ ] Buka phpMyAdmin
+    [ ] Pilih database: nrrskfvk_situneo_digital
+    [ ] Import file: 1_DATABASE/situneo_database_FIXED.sql
+    [ ] Verifikasi 130 tabel terbuat (cek tab Structure)
+    [ ] Jalankan VERIFIKASI_QUICK.sql untuk cek
+
+
+[ ] STEP 2: UPLOAD PROJECT FILES
+    [ ] Buka File Manager di cPanel
+    [ ] Navigate ke folder domain (public_html atau sejenisnya)
+    [ ] Upload SEMUA isi folder: 2_PROJECT_FILES/
+    [ ] Verifikasi semua folder ada:
+        [ ] app/
+        [ ] config/
+        [ ] core/
+        [ ] database/
+        [ ] helpers/
+        [ ] public/
+
+
+[ ] STEP 3: SET DOCUMENT ROOT
+    [ ] Buka Domains di cPanel
+    [ ] Pilih domain: situneo.my.id
+    [ ] Ubah Document Root ke: /public_html/public
+        (atau sesuaikan path, yang penting ke folder public/)
+    [ ] Save
+
+
+[ ] STEP 4: SET PERMISSIONS
+    [ ] Buat folder "storage/" jika belum ada → set 755
+    [ ] Buat folder "logs/" jika belum ada → set 755
+    [ ] Set folder "public/assets/uploads/" → 755
+
+
+[ ] STEP 5: CEK KONFIGURASI
+    [ ] Buka file: config/database.php
+    [ ] Verifikasi credentials:
+        [ ] DB_HOST = 'localhost'
+        [ ] DB_NAME = 'nrrskfvk_situneo_digital'
+        [ ] DB_USER = 'nrrskfvk_user_situneo_digital'
+        [ ] DB_PASS = 'Devin1922$'
+    [ ] Jika beda, edit sesuai database Anda
+
+
+[ ] STEP 6: TEST WEBSITE (DEBUG MODE)
+    [ ] Edit: config/app.php
+    [ ] Set: APP_DEBUG = true (sementara)
+    [ ] Akses: https://situneo.my.id
+    [ ] Jika error, catat pesannya
+    [ ] Fix error jika ada
+
+
+[ ] STEP 7: PRODUCTION MODE
+    [ ] Edit: config/app.php
+    [ ] Set: APP_DEBUG = false
+    [ ] Akses website lagi
+    [ ] Test semua halaman utama:
+        [ ] Homepage
+        [ ] Services
+        [ ] Portfolio
+        [ ] Blog
+        [ ] Contact
+
+
+[ ] STEP 8: SECURITY & OPTIMIZATION
+    [ ] Pastikan SSL certificate aktif (https)
+    [ ] Ganti password database jika perlu
+    [ ] Ganti ENCRYPTION_KEY di config/app.php
+    [ ] Backup database
+    [ ] Backup files
+
+
+========================================================
+QUICK VERIFICATION
+========================================================
+
+Database:
+✓ Total tabel: 130
+✓ Sample data ada
+✓ Foreign keys valid
+
+Website:
+✓ Homepage load tanpa error
+✓ CSS/JS load
+✓ Database connection OK
+✓ No 500 errors
+
+Security:
+✓ APP_DEBUG = false (production)
+✓ HTTPS aktif
+✓ Folder permissions benar
+
+
+========================================================
+JIKA ADA MASALAH
+========================================================
+
+Baca file: README_DEPLOY.txt
+Bagian: TROUBLESHOOTING
+
+Atau cek:
+- logs/error.log
+- logs/database.log
+
+
+========================================================
+DONE! ✓
+========================================================
+
+Jika semua checklist sudah ✓, website Anda SIAP!
+
+Akses: https://situneo.my.id
+
+Selamat! 🎉
