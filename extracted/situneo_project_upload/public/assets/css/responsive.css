@@ -1,0 +1,53 @@
+/* SITUNEO - Responsive CSS */
+
+/* Mobile First Approach */
+
+/* Extra Small Devices (phones, less than 576px) */
+@media (max-width: 575.98px) {
+    .hero {
+        min-height: 400px;
+    }
+    
+    .hero h1 {
+        font-size: 2rem;
+    }
+    
+    .stats .display-4 {
+        font-size: 2rem;
+    }
+    
+    .whatsapp-float,
+    .back-to-top {
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+    }
+}
+
+/* Small Devices (tablets, 576px and up) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .hero {
+        min-height: 500px;
+    }
+}
+
+/* Medium Devices (desktops, 768px and up) */
+@media (min-width: 768px) {
+    .hero {
+        min-height: 600px;
+    }
+}
+
+/* Large Devices (large desktops, 992px and up) */
+@media (min-width: 992px) {
+    .sidebar {
+        border-right: 1px solid #dee2e6;
+    }
+}
+
+/* Extra Large Devices (extra large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1140px;
+    }
+}

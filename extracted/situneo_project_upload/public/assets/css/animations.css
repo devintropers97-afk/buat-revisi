@@ -1,0 +1,81 @@
+/* SITUNEO - Animations CSS */
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+.animate-fadeInUp {
+    animation: fadeInUp 0.8s ease-in-out;
+}
+
+.animate-slideInLeft {
+    animation: slideInLeft 0.8s ease-in-out;
+}
+
+.animate-slideInRight {
+    animation: slideInRight 0.8s ease-in-out;
+}
+
+.animate-pulse {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* Hover Effects */
+.hover-scale {
+    transition: transform 0.3s ease;
+}
+
+.hover-scale:hover {
+    transform: scale(1.05);
+}
+
+.hover-shadow {
+    transition: box-shadow 0.3s ease;
+}
+
+.hover-shadow:hover {
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+}
