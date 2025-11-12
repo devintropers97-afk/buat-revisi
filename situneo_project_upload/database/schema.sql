@@ -21,11 +21,6 @@ DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE `nrrskfvk_situneo_digital`;
 
 -- =====================================================
--- DISABLE FOREIGN KEY CHECKS (Fix dependency issues)
--- =====================================================
-SET FOREIGN_KEY_CHECKS = 0;
-
--- =====================================================
 -- GROUP 1: USER MANAGEMENT (8 TABLES) - ENHANCED
 -- =====================================================
 
@@ -2958,12 +2953,9 @@ INSERT INTO service_categories (category_name, category_slug, category_descripti
 ('App Development', 'app-development', 'Mobile and web applications', 10);
 
 -- =====================================================
--- DATABASE SCHEMA COMPLETE!
+-- DATABASE SCHEMA COMPLETE! 
 -- Total Tables: 130 TABLES
 -- All FUNCTIONAL & AUTO-OPTIMIZED!
 -- =====================================================
-
--- Re-enable foreign key checks
-SET FOREIGN_KEY_CHECKS = 1;
 
 COMMIT;
