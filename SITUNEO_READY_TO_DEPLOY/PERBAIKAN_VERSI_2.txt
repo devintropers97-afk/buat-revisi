@@ -1,0 +1,276 @@
+========================================================
+SITUNEO DIGITAL - PERBAIKAN VERSI 2
+========================================================
+Tanggal: 12 November 2025
+Status: FIXED - SIAP DEPLOY
+
+
+========================================================
+MASALAH YANG DIPERBAIKI
+========================================================
+
+❌ MASALAH 1: SQL Import Gagal di Tabel 113/114
+   Penyebab: CHECK constraint tidak kompatibel MySQL < 8.0.16
+   Error: Tabel testimonials dan tabel lain gagal dibuat
+
+   ✅ SOLUSI:
+   - Hapus semua CHECK constraint (17 constraint)
+   - Rating field tetap TINYINT tapi tanpa CHECK
+   - Validasi rating akan dilakukan di aplikasi PHP
+   - Kompatibel dengan MySQL 5.5+
+
+❌ MASALAH 2: Homepage Menampilkan "Index Of"
+   Penyebab: Document root tidak mengarah ke folder public/
+
+   ✅ SOLUSI:
+   - Tambah file .htaccess di root folder
+   - Tambah file index.php di root untuk redirect
+   - Otomatis redirect ke public/index.php
+   - Bekerja bahkan tanpa ubah document root
+
+
+========================================================
+FILE YANG DIUPDATE
+========================================================
+
+1. situneo_database_FIXED.sql
+   - Hapus 17 CHECK constraints
+   - Tetap 130 tabel lengkap
+   - Kompatibel MySQL 5.5, 5.6, 5.7, 8.0+
+
+2. .htaccess (ROOT FOLDER - BARU!)
+   - Redirect otomatis ke public/
+   - Prevent directory listing
+   - Security headers
+
+3. index.php (ROOT FOLDER - BARU!)
+   - Backup redirect jika .htaccess tidak bekerja
+   - Header redirect ke public/index.php
+
+
+========================================================
+CARA DEPLOY (UPDATE)
+========================================================
+
+STEP 1: IMPORT DATABASE
+--------
+1. Login phpMyAdmin
+2. DROP semua tabel lama jika ada (dari import sebelumnya)
+3. Import: 1_DATABASE/situneo_database_FIXED.sql (versi baru!)
+4. Verifikasi: HARUS ADA 130 TABEL (bukan 113!)
+
+   Query cek:
+   SELECT COUNT(*) FROM information_schema.tables
+   WHERE table_schema = 'nrrskfvk_situneo_digital';
+
+   Hasil harus: 130
+
+
+STEP 2: UPLOAD PROJECT FILES
+--------
+1. Upload SEMUA file dari: 2_PROJECT_FILES/
+2. Pastikan struktur seperti ini:
+
+   public_html/ (atau folder domain)
+   ├── .htaccess          ← FILE BARU! (redirect ke public/)
+   ├── index.php          ← FILE BARU! (backup redirect)
+   ├── app/
+   ├── config/
+   ├── core/
+   ├── database/
+   ├── helpers/
+   └── public/
+       ├── .htaccess      ← Routing internal
+       ├── index.php      ← Entry point utama
+       └── assets/
+
+
+STEP 3: SET DOCUMENT ROOT (OPTIONAL)
+--------
+Ada 2 cara:
+
+CARA A (Direkomendasikan):
+   Set document root di cPanel → Domains ke:
+   /public_html/public
+
+   Benefit: Lebih aman, folder root tidak bisa diakses
+
+CARA B (Alternatif):
+   Biarkan document root di /public_html
+   File .htaccess dan index.php akan handle redirect
+
+   Benefit: Tidak perlu ubah setting domain
+
+
+STEP 4: TEST
+--------
+1. Akses: https://situneo.my.id
+2. Harus muncul HOMEPAGE (bukan "Index Of")
+3. Test navigasi: About, Services, Contact, dll
+4. Cek database connection OK
+
+
+========================================================
+TROUBLESHOOTING
+========================================================
+
+❌ MASALAH: Masih muncul "Index Of"
+
+   SOLUSI 1: Cek file .htaccess di root ada
+   - File: /public_html/.htaccess
+   - Pastikan file uploaded dengan benar
+   - Cek permission 644
+
+   SOLUSI 2: Test index.php redirect
+   - Akses: https://situneo.my.id/index.php
+   - Harus redirect ke public/
+
+   SOLUSI 3: Set document root manual
+   - cPanel → Domains → Manage
+   - Document Root: /public_html/public
+   - Save
+
+   SOLUSI 4: Cek mod_rewrite aktif
+   - .htaccess butuh mod_rewrite
+   - Contact hosting support jika perlu
+
+
+❌ MASALAH: SQL masih error di tabel 113/114
+
+   CIRI-CIRI:
+   - Error message: "CHECK constraint"
+   - Hanya 113 tabel terbuat
+
+   SOLUSI:
+   - Pastikan upload file SQL VERSI 2 (yang baru)
+   - Cek file size: ~124KB
+   - Grep test: grep "CHECK (" file.sql
+     Hasil harus: 0 (tidak ada)
+
+   - Drop semua tabel, import ulang dengan file baru
+
+
+❌ MASALAH: Error 500
+
+   SOLUSI:
+   1. Set APP_DEBUG = true di config/app.php
+   2. Refresh website, lihat error message
+   3. Cek logs/error.log
+   4. Common issues:
+      - Database credentials salah
+      - Folder logs/ tidak writeable (set 755)
+      - PHP version < 7.4
+
+
+========================================================
+VERIFIKASI SUKSES
+========================================================
+
+✓ Database: 130 tabel (bukan 113!)
+   Query: SELECT COUNT(*) FROM information_schema.tables...
+
+✓ Homepage: Muncul website SITUNEO (bukan Index Of)
+   Test: Akses https://situneo.my.id
+
+✓ Navigation: Semua menu berfungsi
+   Test: Klik About, Services, Contact
+
+✓ No Errors: Tidak ada error 500/404
+   Test: Browse website, cek semua link
+
+
+========================================================
+CHECKLIST DEPLOYMENT
+========================================================
+
+□ Backup data lama (jika ada)
+□ Drop tabel lama dari database
+□ Import SQL baru (versi 2, tanpa CHECK constraint)
+□ Verifikasi 130 tabel terbuat
+□ Upload semua file project (termasuk .htaccess di root!)
+□ Set permissions: storage/ logs/ uploads/ → 755
+□ Test homepage (harus muncul website)
+□ Test navigation (About, Services, dll)
+□ Set APP_DEBUG = false (production)
+□ Test semua fitur utama
+□ Backup database + files
+
+
+========================================================
+PERBANDINGAN VERSI
+========================================================
+
+VERSI 1 (Lama):
+❌ 113 tabel (gagal)
+❌ CHECK constraint error
+❌ Index Of muncul
+❌ Tidak kompatibel MySQL lama
+
+VERSI 2 (Baru - INI!):
+✅ 130 tabel (SEMUA!)
+✅ Tanpa CHECK constraint
+✅ Homepage muncul benar
+✅ Kompatibel MySQL 5.5+
+✅ Auto redirect ke public/
+✅ Security headers
+
+
+========================================================
+INFORMASI TEKNIS
+========================================================
+
+MySQL Compatibility:
+- MySQL 5.5+ ✓
+- MySQL 5.6+ ✓
+- MySQL 5.7+ ✓
+- MySQL 8.0+ ✓
+- MariaDB 10.x+ ✓
+
+PHP Requirement:
+- PHP 7.4+ (recommended)
+- PHP 8.0+ (recommended)
+
+Apache Modules:
+- mod_rewrite (untuk .htaccess)
+- mod_headers (untuk security)
+
+
+========================================================
+SUPPORT
+========================================================
+
+Jika masih ada masalah:
+
+1. Cek README_DEPLOY.txt untuk panduan lengkap
+2. Cek logs/error.log untuk error details
+3. Enable APP_DEBUG untuk debugging
+4. Verifikasi semua file terupload dengan benar
+5. Test MySQL version: SELECT VERSION();
+
+
+========================================================
+CHANGELOG
+========================================================
+
+Version 2.0 (12 Nov 2025):
++ Fix: Hapus CHECK constraints (17 fixes)
++ Fix: Tambah .htaccess di root untuk redirect
++ Fix: Tambah index.php di root sebagai backup
++ Improve: Kompatibilitas MySQL 5.5+
++ Improve: Auto redirect ke public/
++ Add: Security headers di .htaccess
+
+Version 1.0 (12 Nov 2025):
++ Initial release
+- Issue: CHECK constraint error
+- Issue: Index Of muncul
+
+
+========================================================
+
+SELAMAT DEPLOY! VERSI INI SUDAH TESTED! ✅
+
+Semua masalah yang dilaporkan sudah diperbaiki.
+File siap upload ke cPanel.
+
+Good luck! 🚀
